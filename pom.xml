@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>jmeterReport</groupId>
+    <artifactId>jmeterReport</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+<dependencies>
+    <!-- ant  开始-->
+    <dependency>
+        <groupId>org.apache.ant</groupId>
+        <artifactId>ant</artifactId>
+        <version>1.9.4</version>
+    </dependency>
+    <!-- ant  就结束-->
+    <!-- 饼状图依赖  开始-->
+
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.5</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+        <version>1.2</version>
+    </dependency>
+    <dependency>
+        <groupId>jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+        <version>1.0.13</version>
+    </dependency>
+    <!-- 饼状图依赖 结束-->
+    <!-- 邮箱依赖 开始-->
+    <dependency>
+        <groupId>com.sun.mail</groupId>
+        <artifactId>javax.mail</artifactId>
+        <version>1.4.4</version>
+    </dependency>
+    <!-- 邮箱依赖  结束-->
+</dependencies>
+</project>
