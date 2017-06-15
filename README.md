@@ -1,5 +1,6 @@
  这是一个基于ant+jmeter的报告样式修改已经发送邮件的功能
  使用方式:
+ 
         1.下载源代码,打成一个jar包扔到ant里面详细参考
         配置 http://www.cnblogs.com/puresoul/p/4808416.html 
         
