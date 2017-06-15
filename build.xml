@@ -26,7 +26,7 @@
 	<target name="test">
 		<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask" />
 		<jmeter jmeterhome="${jmeter.home}" resultlog="${jmeter.result.jtlName}">
-       
+       		<!--你要运行的jmx文件,参考jmeter的官网配置-->
 			<testplans dir="${jmeter.home}\bin" includes="*.jmx" />
 			<property name="jmeter.save.saveservice.output_format" value="xml"/>
 			<!--
