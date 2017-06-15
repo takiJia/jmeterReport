@@ -96,10 +96,10 @@
 		<mail mailhost="smtp.qq.com"
 			mailport="994"
 			ssl="true"		
-			user="165157905@qq.com"
-			password="gbbyiatyvetqcacf"
+			user=""
+			password=""
 			subject="接口测试报告"
-			from="165157905@qq.com"
+			from=""
 			>
 			<to address="jiaou@jd.com"/>
 			<message>详细报告请查看附件</message>
