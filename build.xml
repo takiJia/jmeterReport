@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ant-jmeter-test" default="all" basedir=".">
+	<tstamp>
+        <format property="time" pattern="yyyyMMddhhmm" />
+    </tstamp>
+	<property name="jmeter.home" value="你的jmeter路径" />
+	<property name="jmeter.result.dir" value="${jmeter.home}\report" />
+	<property name="jmeter.result.jtl.dir" value="${jmeter.home}\report\jtl" />
+	<property name="jmeter.result.html.dir" value="${jmeter.home}\report\html" />
+	<property name="ReportName" value="TestReport" />
+	<property name="jmeter.result.jtlName" value="${jmeter.result.jtl.dir}/${ReportName}${time}.jtl" />
+	<property name="jmeter.result.htmlName" value="${jmeter.result.html.dir}\${ReportName}${time}.html" />
+		
+	<path id= "compile.classpath"> 
+		<pathelement path = "${jmeter.home}/lib/mail-1.5.0-b01.jar"/> 
+	</path> 
+
+	<target name="all">
+		<antcall target="test"/>
+		<!--用自己的target运行-->
+		<antcall target="reportTask" />
+		
+	</target>
+	
+	
+	<target name="test">
+		<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask" />
+		<jmeter jmeterhome="${jmeter.home}" resultlog="${jmeter.result.jtlName}">
+       
+			<testplans dir="${jmeter.home}\bin" includes="*.jmx" />
+			<property name="jmeter.save.saveservice.output_format" value="xml"/>
+			<!--
+			<property name="jmeter.save.saveservice.data_type" value="true"/>
+			<property name="jmeter.save.saveservice.label" value="true"/>
+			<property name="jmeter.save.saveservice.response_code" value="true"/>
+			<property name="jmeter.save.saveservice.response_data" value="true"/>
+			<property name="jmeter.save.saveservice.response_data.on_error" value="false"/>
+			<property name="jmeter.save.saveservice.response_message" value="true"/>
+			<property name="jmeter.save.saveservice.successful" value="true"/>
+			<property name="jmeter.save.saveservice.thread_name" value="false"/>
+			<property name="jmeter.save.saveservice.time" value="true"/>
+			<property name="jmeter.save.saveservice.subresults" value="true"/>
+			<property name="jmeter.save.saveservice.assertions" value="true"/>
+			<property name="jmeter.save.saveservice.latency" value="false"/>
+			<property name="jmeter.save.saveservice.connect_time" value="true"/>
+			<property name="jmeter.save.saveservice.samplerData" value="true"/>
+			<property name="jmeter.save.saveservice.responseHeaders" value="false"/>
+			<property name="jmeter.save.saveservice.requestHeaders" value="false"/>
+			<property name="jmeter.save.saveservice.encoding" value="false"/>
+			<property name="jmeter.save.saveservice.bytes" value="false"/>
+			<property name="jmeter.save.saveservice.url" value="true"/>
+			<property name="jmeter.save.saveservice.filename" value="false"/>
+			<property name="jmeter.save.saveservice.hostname" value="true"/>
+			<property name="jmeter.save.saveservice.thread_counts" value="false"/>
+			<property name="jmeter.save.saveservice.sample_count" value="false"/>
+			<property name="jmeter.save.saveservice.idle_time" value="true"/>
+			-->
+		</jmeter>
+	</target>
+		
+	<target name="report">
+		<xslt in="${jmeter.result.jtlName}"
+		      out="${jmeter.result.htmlName}"
+		      style="${jmeter.home}/extras/jmeter.results.shanhe.me.xsl" />
+	
+        <copy todir="${jmeter.result.html.dir}">
+            <fileset dir="${jmeter.home}/extras">
+                <include name="collapse.png" />
+                <include name="expand.png" />
+            </fileset>
+        </copy>
+	</target>
+	
+	
+	<target name="reportTask">
+		<taskdef name="myReportTask" classname="org.programmerplanet.ant.taskdefs.jmeter.ReportTask" />
+			<myReportTask in="${jmeter.result.jtlName}"
+				out="${jmeter.result.htmlName}"
+				mailhost="smtp.qq.com"
+				ssl="true"
+				user="邮箱账号"
+				password="邮箱密码"
+				mailTitle="接口测试报告"
+				from="发送人"
+				toAddress="收件人"
+				runUser="运行的用户">
+			</myReportTask>
+	</target>
+	
+	 <target name="clean">
+        <echo>清理报告</echo>
+        <delete dir="${jmeter.result.dir}" includeemptydirs="true"></delete>
+    </target>
+    
+    <target name="sendmail" >
+		<mail mailhost="smtp.qq.com"
+			mailport="994"
+			ssl="true"		
+			user="165157905@qq.com"
+			password="gbbyiatyvetqcacf"
+			subject="接口测试报告"
+			from="165157905@qq.com"
+			>
+			<to address="jiaou@jd.com"/>
+			<message>详细报告请查看附件</message>
+			  <attachments>
+			    <fileset dir="${jmeter.result.html.dir}"> 
+			      <include name="${ReportName}${time}.html"/>
+			    </fileset> 
+			  </attachments>
+		</mail>
+	</target>
+
+    
+</project>
