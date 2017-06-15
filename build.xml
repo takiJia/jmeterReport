@@ -101,7 +101,7 @@
 			subject="接口测试报告"
 			from=""
 			>
-			<to address="jiaou@jd.com"/>
+			<to address=""/>
 			<message>详细报告请查看附件</message>
 			  <attachments>
 			    <fileset dir="${jmeter.result.html.dir}"> 
