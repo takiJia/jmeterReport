@@ -4,8 +4,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.

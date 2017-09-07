@@ -13,7 +13,6 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,6 +49,7 @@ public class ReportHtml {
         } catch (Exception e) {
             System.out.println("转换JTL文件失败，请确认格式是否正确:" + e);
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
         System.out.println("读取JTL文件完毕，开始获取测试用例:");
         Element element = document.getDocumentElement();
@@ -60,7 +60,7 @@ public class ReportHtml {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             String nodeName = node.getNodeName();
-            if (nodeName.contains("Sample")) {
+            if (nodeName.contains("Sample") || nodeName.contains("sample")) {
                 ReportCase reportCase = new ReportCase();
                 NamedNodeMap namedNodeMap = node.getAttributes();
                 try {
@@ -82,12 +82,10 @@ public class ReportHtml {
                     Node startTimeNode = namedNodeMap.getNamedItem("ts");
                     if (!isEmpty(startTimeNode)) {
                         String startTimeStr = startTimeNode.getNodeValue();
-                        if (allCase == 0) {
+                        if (startTime == 0) {
                             startTime = Long.parseLong(startTimeStr);
                         }
-                        if (i == nodeList.getLength() - 1) {
-                            endTime = Long.parseLong(startTimeStr);
-                        }
+                        endTime = Long.parseLong(startTimeStr);
                     }
                     Node statusNode = namedNodeMap.getNamedItem("s");
                     if (!isEmpty(statusNode)) {
@@ -213,7 +211,7 @@ public class ReportHtml {
             String caseFailCount = (allCase - passCase) + "";
             dataset.setValue("PassCase", new Double(casePassCount));
             dataset.setValue("FailCase", new Double(caseFailCount));
-            String pngPath = path + "\\report.png";
+            String pngPath = path + File.separator +"report.png";
             PicReport picReport = new PicReport();
             picReport.save(dataset, pngPath, "通过率");
             System.out.println("饼状图生成结束,路径:" + pngPath);

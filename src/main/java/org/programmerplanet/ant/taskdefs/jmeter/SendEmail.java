@@ -93,7 +93,7 @@ public class SendEmail {
         // 创建邮件的正文
         MimeBodyPart text = new MimeBodyPart();
         // setContent(“邮件的正文内容”,”设置邮件内容的编码方式”)
-        text.setContent(mailObj.getMailContent() + "<img src='cid:b'>",
+        text.setContent(mailObj.getMailContent(),
                 "text/html;charset=UTF-8");
 
         // 点到点的发送
@@ -120,7 +120,7 @@ public class SendEmail {
         mm.addBodyPart(text);
 
         // 创建图片的一个表示用于显示在邮件中显示
-        File pngFile = new File(mailObj.getReportPath() + "\\report.png");
+        File pngFile = new File(mailObj.getReportPath() +File.separator+ "report.png");
         if (pngFile.exists()) {
             DataHandler dh = new DataHandler(new FileDataSource(pngFile.getAbsolutePath()));//图片路径
             img.setDataHandler(dh);

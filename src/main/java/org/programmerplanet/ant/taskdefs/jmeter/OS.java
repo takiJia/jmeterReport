@@ -101,23 +101,22 @@ public class OS {
      * 获取本机IP
      */
     public static String getLocalIP() {
-        initOS();
-        String ip = "";
+        OS.initOS();
+        String ip =null;
         try {
-            if (isLinux()) {
-                Enumeration<?> e1 = (Enumeration<?>) NetworkInterface
-                        .getNetworkInterfaces();
+            if (OS.isLinux()) {
+                Enumeration<NetworkInterface> e1 = NetworkInterface
+                    .getNetworkInterfaces();
+
                 while (e1.hasMoreElements()) {
-                    NetworkInterface ni = (NetworkInterface) e1.nextElement();
-                    if (!ni.getName().equals("eth0")) {
-                        continue;
-                    } else {
-                        Enumeration<?> e2 = ni.getInetAddresses();
+                    NetworkInterface ni = e1.nextElement();
+                    if (ni.getName().startsWith("eth")) {
+                        Enumeration<InetAddress> e2 = ni.getInetAddresses();
                         while (e2.hasMoreElements()) {
-                            InetAddress ia = (InetAddress) e2.nextElement();
-                            if (ia instanceof Inet6Address)
-                                continue;
-                            ip = ia.getHostAddress();
+                            InetAddress ia = e2.nextElement();
+                            if (!(ia instanceof Inet6Address)) {
+                                ip = ia.getHostAddress();
+                            }
                         }
                         break;
                     }
@@ -125,12 +124,11 @@ public class OS {
             } else {
                 ip = InetAddress.getLocalHost().getHostAddress().toString();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(ip==null||ip.equalsIgnoreCase("")){
-            ip=getCentOsIp();
+        if (ip == null || ip.equalsIgnoreCase("")) {
+            ip = OS.getCentOsIp();
         }
         return ip;
     }
