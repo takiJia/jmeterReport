@@ -1,6 +1,6 @@
 package org.programmerplanet.ant.taskdefs.jmeter;
 
-import java.awt.*;
+import java.awt.Toolkit;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -29,95 +29,95 @@ public class OS {
     public static void initOS() {
 
         String os = System.getProperty("os.name").toLowerCase();
-        osIsMacOsX = "mac os x".equals(os);
-        osIsWindows = os.indexOf("windows") != -1;
-        osIsWindowsXP = "windows xp".equals(os);
-        osIsWindows2003 = "windows 2003".equals(os);
-        osIsLinux = "linux".equalsIgnoreCase(os);
+        OS.osIsMacOsX = "mac os x".equals(os);
+        OS.osIsWindows = os.indexOf("windows") != -1;
+        OS.osIsWindowsXP = "windows xp".equals(os);
+        OS.osIsWindows2003 = "windows 2003".equals(os);
+        OS.osIsLinux = "linux".equalsIgnoreCase(os);
     }
 
     /**
      * @return true if this VM is running on Mac OS X
      */
     public static boolean isMacOSX() {
-        return osIsMacOsX;
+        return OS.osIsMacOsX;
     }
 
     /**
      * @return true if this VM is running on Windows
      */
     public static boolean isWindows() {
-        return osIsWindows;
+        return OS.osIsWindows;
     }
 
     /**
      * @return true if this VM is running on Windows XP
      */
     public static boolean isWindowsXP() {
-        return osIsWindowsXP;
+        return OS.osIsWindowsXP;
     }
 
     /**
      * @return true if this VM is running on Windows 2003
      */
     public static boolean isWindows2003() {
-        return osIsWindows2003;
+        return OS.osIsWindows2003;
     }
 
     /**
      * @return true if this VM is running on Linux
      */
     public static boolean isLinux() {
-        return osIsLinux;
+        return OS.osIsLinux;
     }
 
     /**
      * @return true if the VM is running Windows and the Java application is
-     * rendered using XP Visual Styles.
+     *         rendered using XP Visual Styles.
      */
     public static boolean isUsingWindowsVisualStyles() {
-        if (!isWindows()) {
+        if (!OS.isWindows()) {
             return false;
         }
 
         boolean xpthemeActive = Boolean.TRUE.equals(Toolkit.getDefaultToolkit()
-                .getDesktopProperty("win.xpstyle.themeActive"));
+            .getDesktopProperty("win.xpstyle.themeActive"));
         if (!xpthemeActive) {
             return false;
         } else {
             try {
                 return System.getProperty("swing.noxp") != null;
             } catch (RuntimeException e) {
+                e.printStackTrace();
                 return true;
             }
         }
     }
 
     public static void main(String[] args) {
-        System.out.println(getLocalIP());
+        System.out.println(OS.getLocalIP());
     }
 
     /**
      * 获取本机IP
      */
     public static String getLocalIP() {
-        initOS();
+        OS.initOS();
         String ip = "";
         try {
-            if (isLinux()) {
-                Enumeration<?> e1 = (Enumeration<?>) NetworkInterface
-                        .getNetworkInterfaces();
+            if (OS.isLinux()) {
+                Enumeration<NetworkInterface> e1 = NetworkInterface
+                    .getNetworkInterfaces();
+
                 while (e1.hasMoreElements()) {
-                    NetworkInterface ni = (NetworkInterface) e1.nextElement();
-                    if (!ni.getName().equals("eth0")) {
-                        continue;
-                    } else {
-                        Enumeration<?> e2 = ni.getInetAddresses();
+                    NetworkInterface ni = e1.nextElement();
+                    if (ni.getName().startsWith("eth")) {
+                        Enumeration<InetAddress> e2 = ni.getInetAddresses();
                         while (e2.hasMoreElements()) {
-                            InetAddress ia = (InetAddress) e2.nextElement();
-                            if (ia instanceof Inet6Address)
-                                continue;
-                            ip = ia.getHostAddress();
+                            InetAddress ia = e2.nextElement();
+                            if (!(ia instanceof Inet6Address)) {
+                                ip = ia.getHostAddress();
+                            }
                         }
                         break;
                     }
@@ -125,12 +125,11 @@ public class OS {
             } else {
                 ip = InetAddress.getLocalHost().getHostAddress().toString();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(ip==null||ip.equalsIgnoreCase("")){
-            ip=getCentOsIp();
+        if (ip == null || ip.equalsIgnoreCase("")) {
+            ip = OS.getCentOsIp();
         }
         return ip;
     }
@@ -188,8 +187,8 @@ public class OS {
         String os = "";
         try {
             os = System.getProperty("os.name") + "("
-                    + System.getProperty("os.version") + ")"
-                    + System.getProperty("os.arch");
+                + System.getProperty("os.version") + ")"
+                + System.getProperty("os.arch");
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -226,7 +225,7 @@ public class OS {
         InetAddress ia = null;
         String localip = "";
         try {
-            ia = ia.getLocalHost();
+            ia = InetAddress.getLocalHost();
             localip = ia.getHostAddress();
         } catch (Exception e) {
             // TODO Auto-generated catch block

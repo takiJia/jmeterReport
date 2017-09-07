@@ -1,12 +1,5 @@
 package org.programmerplanet.ant.taskdefs.jmeter;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jiaou
- * Date: 16-11-7
- * Time: 下午2:30
- * To change this template use File | Settings | File Templates.
- */
 public class ReportCase {
     private String caseName;
     private String responseData;
@@ -17,9 +10,11 @@ public class ReportCase {
     private String responseCode;
     private String responseMessage;
     private boolean status;
+    private String suiteName;
+    private AssertionResult assertionResult;
 
     public boolean isStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(boolean status) {
@@ -27,17 +22,15 @@ public class ReportCase {
     }
 
     public String getResponseMessage() {
-        return responseMessage;
+        return this.responseMessage;
     }
 
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
     }
 
-    private AssertionResult assertionResult;
-
     public AssertionResult getAssertionResult() {
-        return assertionResult;
+        return this.assertionResult;
     }
 
     public void setAssertionResult(AssertionResult assertionResult) {
@@ -45,7 +38,7 @@ public class ReportCase {
     }
 
     public String getCaseName() {
-        return caseName;
+        return this.caseName;
     }
 
     public void setCaseName(String caseName) {
@@ -53,7 +46,7 @@ public class ReportCase {
     }
 
     public String getResponseData() {
-        return responseData;
+        return this.responseData;
     }
 
     public void setResponseData(String responseData) {
@@ -61,7 +54,7 @@ public class ReportCase {
     }
 
     public String getMethodName() {
-        return methodName;
+        return this.methodName;
     }
 
     public void setMethodName(String methodName) {
@@ -69,7 +62,7 @@ public class ReportCase {
     }
 
     public String getQueryString() {
-        return queryString;
+        return this.queryString;
     }
 
     public void setQueryString(String queryString) {
@@ -77,7 +70,7 @@ public class ReportCase {
     }
 
     public String getUrl() {
-        return url;
+        return this.url;
     }
 
     public void setUrl(String url) {
@@ -85,7 +78,7 @@ public class ReportCase {
     }
 
     public String getRunTime() {
-        return runTime;
+        return this.runTime;
     }
 
     public void setRunTime(String runTime) {
@@ -93,10 +86,18 @@ public class ReportCase {
     }
 
     public String getResponseCode() {
-        return responseCode;
+        return this.responseCode;
     }
 
     public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
+    }
+
+    public String getSuiteName() {
+        return this.suiteName;
+    }
+
+    public void setSuiteName(String suiteName) {
+        this.suiteName = suiteName;
     }
 }

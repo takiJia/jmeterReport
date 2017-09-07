@@ -1,17 +1,25 @@
 package org.programmerplanet.ant.taskdefs.jmeter;
 
 
-import com.sun.mail.util.MailSSLSocketFactory;
-
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
+
+import com.sun.mail.util.MailSSLSocketFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -56,6 +64,7 @@ public class SendEmail {
          */
         MimeMessage message = new MimeMessage(Session.getInstance(properties,
                 new Authenticator() {
+                    @Override
                     public PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(//设置发送帐号密码
                                 userName, password);
@@ -71,14 +80,14 @@ public class SendEmail {
 
         // 设置邮件的收件人 cc表示抄送 bcc 表示暗送
         if (null != sendTo) {
-            InternetAddress[] senderList = new InternetAddress()
+            InternetAddress[] senderList = InternetAddress
                     .parse(sendTo);
             message.setRecipients(Message.RecipientType.TO, senderList);
         } else {
             return;
         }
         if (null != sendToCC) {
-            InternetAddress[] iaCCList = new InternetAddress()
+            InternetAddress[] iaCCList = InternetAddress
                     .parse(sendToCC);
             message.setRecipients(Message.RecipientType.CC, iaCCList);
         }
@@ -93,7 +102,7 @@ public class SendEmail {
         // 创建邮件的正文
         MimeBodyPart text = new MimeBodyPart();
         // setContent(“邮件的正文内容”,”设置邮件内容的编码方式”)
-        text.setContent(mailObj.getMailContent() + "<img src='cid:b'>",
+        text.setContent(mailObj.getMailContent(),
                 "text/html;charset=UTF-8");
 
         // 点到点的发送
@@ -161,7 +170,7 @@ public class SendEmail {
 
 
     public static void main(String[] args) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("sendTo", "165157905@qq.com");
 //        map.put("sendToCC", "jiaou@jd.com");
         try {

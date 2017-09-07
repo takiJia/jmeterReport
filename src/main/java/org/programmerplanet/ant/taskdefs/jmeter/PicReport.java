@@ -1,5 +1,12 @@
 package org.programmerplanet.ant.taskdefs.jmeter;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -22,12 +29,6 @@ import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.TextAnchor;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 /**
  * Created with IntelliJ IDEA.
  * User: jiaou
@@ -41,7 +42,7 @@ public class PicReport extends ServletUtilities {
     private String titleName;
 
     public String getTitleName() {
-        return titleName;
+        return this.titleName;
     }
 
     public void setTitleName(String titleName) {
@@ -49,11 +50,11 @@ public class PicReport extends ServletUtilities {
     }
 
     public String getFileName() {
-        return fileName;
+        return PicReport.fileName;
     }
 
     public void setFileName(String fileName) {
-        this.fileName = fileName;
+        PicReport.fileName = fileName;
     }
 
     protected static void createTempDir() {
@@ -68,7 +69,6 @@ public class PicReport extends ServletUtilities {
     }
 
     public static String saveChartAsPNG(JFreeChart chart, int width, int height) throws IOException {
-        String file = new File("d:").getAbsolutePath() + "/health";
         String path = System.getProperty("user.dir") + "\\pic";
         ///判断目录是否存在，不存在创建一个
         File getFile = new File(path);
@@ -82,14 +82,14 @@ public class PicReport extends ServletUtilities {
         }
 //        createTempDir();
         String prefix = ServletUtilities.getTempFilePrefix();
-        prefix = fileName;
+        prefix = PicReport.fileName;
         File tempFile = File.createTempFile(prefix, ".png", new File(tempDirName));
         ChartUtilities.saveChartAsJPEG(tempFile, chart, width, height);
         return path + "\\" + tempFile.getName();
     }
 
 
-    public void getCaky() throws IOException {
+    public void getCaky() {
 
         DefaultPieDataset defaultpiedataset = new DefaultPieDataset();
         defaultpiedataset.setValue("CRM", 10.02D);
@@ -107,19 +107,6 @@ public class PicReport extends ServletUtilities {
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLabelFont(new Font("华文楷体", Font.BOLD, 13));// 设置实际统计图的字体
         plot.setBackgroundAlpha(0.4f);
-
-        if (chart == null) {
-            throw new IllegalArgumentException("Null 'chart' argument.");
-        }
-        String fileName = "";
-        PicReport barChart = new PicReport();
-        try {
-            fileName = barChart.saveChartAsPNG(chart, 450, 350);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(fileName);
-
     }
 
 
@@ -215,22 +202,26 @@ public class PicReport extends ServletUtilities {
 //        4、  图表底部乱码（项目等文字）
 
         chart.getLegend().setItemFont(new Font("宋体", Font.PLAIN, 20));
-        String fileName = "";
-        PicReport barChart = new PicReport();
+        String fileName1 = "";
         try {
-            fileName = barChart.saveChartAsPNG(chart, 1200, 550);   //宽 高
+            fileName1 = PicReport.saveChartAsPNG(chart, 1200, 550);   //宽 高
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 //        fileName = fileName.substring(fileName.lastIndexOf("j"));
-        return fileName;
+        return fileName1;
     }
 
     /**
      * 饼状图
+     *
+     * @param dataset
+     * @param fileName1
+     * @param titleName
      */
-    public static void pieChart3D(DefaultPieDataset dataset, String fileName, String titleName) {
+    public static void pieChart3D(DefaultPieDataset dataset, String fileName1,
+            String titleName) {
 //        DefaultPieDataset dataset = new DefaultPieDataset();
 //        dataset.setValue(" 市场前期", new Double(10));
         JFreeChart chart = ChartFactory.createPieChart3D(titleName, dataset,
@@ -256,13 +247,13 @@ public class PicReport extends ServletUtilities {
         // 指定显示的饼图上圆形(false)还椭圆形(true)
         plot.setCircular(true);
         // 设置图标题的字体
-        Font font = new Font(" 黑体", Font.CENTER_BASELINE, 20);
+        Font font = new Font("SimSun", Font.CENTER_BASELINE, 20);
         TextTitle title = new TextTitle(titleName);
         title.setFont(font);
         chart.setTitle(title);
         plot.setLabelFont(new Font("SimSun", 0, 15));//
         LegendTitle legend = chart.getLegend(0);
-        legend.setItemFont(new Font("宋体", Font.BOLD, 16));
+        legend.setItemFont(new Font("SimSun", Font.BOLD, 16));
 //        PicReport barChart = new PicReport();
 //        try {
 //            fileName = barChart.saveChartAsPNG(chart, 1200, 550);   //宽 高
@@ -271,7 +262,7 @@ public class PicReport extends ServletUtilities {
 //        }
         try {
             ChartUtilities.saveChartAsJPEG(
-                    new File(fileName), //输出到哪个输出流
+                new File(fileName1), //输出到哪个输出流
                     1, //JPEG图片的质量，0~1之间
                     chart, //统计图标对象
                     640, //宽
@@ -285,7 +276,8 @@ public class PicReport extends ServletUtilities {
 
     }
 
-    public void save(DefaultPieDataset dataset, String fileName, String titleName) {
-        pieChart3D(dataset, fileName, titleName);
+    public void save(DefaultPieDataset dataset, String fileName1,
+            String titleName1) {
+        PicReport.pieChart3D(dataset, fileName1, titleName1);
     }
 }
