@@ -186,9 +186,7 @@ public class JMeterTask extends Task {
 			for (Iterator i = resultLogFiles.iterator(); i.hasNext();) {
 				File resultLogFile = (File)i.next();
 				log("Checking result log file " + resultLogFile.getName() + ".", Project.MSG_VERBOSE);
-				LineNumberReader reader = null;
-				try {
-					reader = new LineNumberReader(new FileReader(resultLogFile));
+				try(LineNumberReader reader = new LineNumberReader(new FileReader(resultLogFile))) {
 					// look for any success="false" (pre 2.1) or s="false" (post 2.1)
 					String line = null;
 					while ((line = reader.readLine()) != null) {
@@ -203,13 +201,6 @@ public class JMeterTask extends Task {
 				}
 				catch (IOException e) {
 					throw new BuildException("Could not read jmeter resultLog: " + e.getMessage());
-				}
-				finally {
-					try {
-						reader.close();
-					}
-					catch (Exception e) { /* ignore */
-					}
 				}
 			}
 		}
